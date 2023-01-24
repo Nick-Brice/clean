@@ -7,22 +7,18 @@
 
 /** @type {import("next").NextConfig} */
 const config = {
-  reactStrictMode: false,
+  reactStrictMode: true,
   swcMinify: true,
   i18n: {
     locales: ["en"],
     defaultLocale: "en",
   },
+  eslint: {
+    // Warning: This allows production builds to successfully complete even if
+    // your project has ESLint errors.
+    ignoreDuringBuilds: true,
+  },
 };
 
-module.exports = {
-  typescript: {
-    // !! WARN !!
-    // Dangerously allow production builds to successfully complete even if
-    // your project has type errors.
-    // !! WARN !!
-    ignoreBuildErrors: true,
-  },
-}
 
 export default config;

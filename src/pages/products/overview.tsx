@@ -8,9 +8,9 @@ import React, { useState } from "react";
 import DraggableTable from "../../components/draggableTable2"
 import DonutProgress from "../../components/donutProgress2";
 import Counter from "../../components/counter";
-import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
+// import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
-import AnimatedProgressProvider from '../../components/AnimatedProgressProvider';
+// import AnimatedProgressProvider from '../../components/AnimatedProgressProvider';
 import { easeQuadInOut } from "d3-ease";
 import AreaChart from "../../components/d3AreaGraph";
 import LineGraph from '../../components/d3LineGraph';
@@ -117,7 +117,7 @@ const Test: NextPage = () => {
         },
     ];
 
-    const columnNames = Object.keys(data[0]);
+    // const columnNames = Object.keys(data[0]);
 
     const [openForm, setOpenForm] = React.useState(false);
 
@@ -129,40 +129,40 @@ const Test: NextPage = () => {
     const [topTableData, setTopTableData] = React.useState(data);
     const [bottomTableData, setBottomTableData] = React.useState(data);
 
-    const handleSort = (key, order) => {
-        if (sort.order == "ascending") {
-            let sortedData = [...tableData].sort((a, b) => {
-                if (a[key] < b[key]) return -1;
-                if (a[key] > b[key]) return 1;
-                return 0;
-            });
-            let topSortedData = sortedData.slice(0, -1);
-            let bottomSortedData = sortedData.slice(-1);
-            setTableData(sortedData);
-            setTopTableData(topSortedData);
-            setBottomTableData(bottomSortedData);
-        } else {
-            let sortedData = [...tableData].sort((a, b) => {
-                if (a[key] > b[key]) return -1;
-                if (a[key] < b[key]) return 1;
-                return 0;
-            });
-            let topSortedData = sortedData.slice(0, -1);
-            let bottomSortedData = sortedData.slice(-1);
-            setTableData(sortedData);
-            setTopTableData(topSortedData);
-            setBottomTableData(bottomSortedData);
-        }
-    };
+    // const handleSort = (key, order) => {
+    //     if (sort.order == "ascending") {
+    //         let sortedData = [...tableData].sort((a, b) => {
+    //             if (a[key] < b[key]) return -1;
+    //             if (a[key] > b[key]) return 1;
+    //             return 0;
+    //         });
+    //         let topSortedData = sortedData.slice(0, -1);
+    //         let bottomSortedData = sortedData.slice(-1);
+    //         setTableData(sortedData);
+    //         setTopTableData(topSortedData);
+    //         setBottomTableData(bottomSortedData);
+    //     } else {
+    //         let sortedData = [...tableData].sort((a, b) => {
+    //             if (a[key] > b[key]) return -1;
+    //             if (a[key] < b[key]) return 1;
+    //             return 0;
+    //         });
+    //         let topSortedData = sortedData.slice(0, -1);
+    //         let bottomSortedData = sortedData.slice(-1);
+    //         setTableData(sortedData);
+    //         setTopTableData(topSortedData);
+    //         setBottomTableData(bottomSortedData);
+    //     }
+    // };
 
-    const toggleSort = (column) => {
-        if (sort.column == column) {
-            setSort({ column, order: sort.order == 'ascending' ? 'descending' : 'ascending' });
-        } else {
-            setSort({ column, order: 'descending' });
-        }
-        console.log(sort)
-    }
+    // const toggleSort = (column) => {
+    //     if (sort.column == column) {
+    //         setSort({ column, order: sort.order == 'ascending' ? 'descending' : 'ascending' });
+    //     } else {
+    //         setSort({ column, order: 'descending' });
+    //     }
+    //     console.log(sort)
+    // }
 
     const handleLayoutChange = () => {
         if (layout === 'table') {
@@ -319,17 +319,17 @@ const Test: NextPage = () => {
 
 
 
-                                <DropdownMenu name="field2" label="Field 2" sort={sort}>
+                                {/* <DropdownMenu name="field2" label="Field 2" sort={sort}>
                                     {columnNames.map((col, index) => (
                                         <option onClick={() => { toggleSort(col); handleSort(col, sort.order) }} value={col}>{col}</option>
-                                    ))}
+                                    ))} */}
                                     {/* <option onClick={() => { toggleSort('used'); handleSort('used', sort.order) }} value="Option 1">Option 1</option>
                                     <option value="Option 2">Option 2</option>
                                     <option value="Option 3">Option 3</option>
                                     <option value="Option 4">Option 4</option>
                                     <option value="Option 5">Option 5</option>
                                     <option value="Option 6">Option 6</option> */}
-                                </DropdownMenu>
+                                {/* </DropdownMenu> */}
 
                             </div>
                         </HeaderButton>
