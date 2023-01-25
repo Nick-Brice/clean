@@ -8,9 +8,9 @@ import React, { useState } from "react";
 import DraggableTable from "../components/draggableTable2"
 import DonutProgress from "../components/donutProgress2";
 import Counter from "../components/counter";
-// import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
+import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
-// import AnimatedProgressProvider from '../../components/AnimatedProgressProvider';
+// import AnimatedProgressProvider from '../components/AnimatedProgressProvider';
 import { easeQuadInOut } from "d3-ease";
 import AreaChart from "../components/d3AreaGraph";
 import LineGraph from '../components/d3LineGraph';
@@ -22,9 +22,15 @@ import animationData from '../components/circularAnimation.json';
 import CircularAnimation from '../components/circularAnimation';
 import FormLayout from "../components/formLayout";
 
-const Home: NextPage = () => {
+const Test: NextPage = () => {
 
-    const data = [
+    const [showMenuText, setShowMenuText] = useState<string | null>(null);
+
+    const handleHover = (tab: string | null) => {
+        setShowMenuText(tab);
+    }
+
+    const data: {}[] = [
         {
             name: "Nick",
             delivered: 244443,
@@ -114,10 +120,12 @@ const Home: NextPage = () => {
             test2: 2,
             test3: 3,
             test4: 4
-        },
+        }
     ];
 
-    // const columnNames = Object.keys(data[0]);
+    const first = data[0];
+
+    const columnNames = Object.keys(data[0]!);
 
     const [openForm, setOpenForm] = React.useState(false);
 
@@ -129,40 +137,48 @@ const Home: NextPage = () => {
     const [topTableData, setTopTableData] = React.useState(data);
     const [bottomTableData, setBottomTableData] = React.useState(data);
 
-    // const handleSort = (key, order) => {
-    //     if (sort.order == "ascending") {
-    //         let sortedData = [...tableData].sort((a, b) => {
-    //             if (a[key] < b[key]) return -1;
-    //             if (a[key] > b[key]) return 1;
-    //             return 0;
-    //         });
-    //         let topSortedData = sortedData.slice(0, -1);
-    //         let bottomSortedData = sortedData.slice(-1);
-    //         setTableData(sortedData);
-    //         setTopTableData(topSortedData);
-    //         setBottomTableData(bottomSortedData);
-    //     } else {
-    //         let sortedData = [...tableData].sort((a, b) => {
-    //             if (a[key] > b[key]) return -1;
-    //             if (a[key] < b[key]) return 1;
-    //             return 0;
-    //         });
-    //         let topSortedData = sortedData.slice(0, -1);
-    //         let bottomSortedData = sortedData.slice(-1);
-    //         setTableData(sortedData);
-    //         setTopTableData(topSortedData);
-    //         setBottomTableData(bottomSortedData);
-    //     }
-    // };
+    function hasKey(obj: object, key: string): obj is { [key: string]: any } {
+        return key in obj;
+    }
 
-    // const toggleSort = (column) => {
-    //     if (sort.column == column) {
-    //         setSort({ column, order: sort.order == 'ascending' ? 'descending' : 'ascending' });
-    //     } else {
-    //         setSort({ column, order: 'descending' });
-    //     }
-    //     console.log(sort)
-    // }
+    const handleSort = (key: string) => {
+        if (sort.order == "ascending") {
+            let sortedData = [...tableData].sort((a, b) => {
+                if (hasKey(a, key) && hasKey(b, key)) {
+                    if (a[key] < b[key]) return -1;
+                    if (a[key] > b[key]) return 1;
+                }
+                return 0;
+            });
+            let topSortedData = sortedData.slice(0, -1);
+            let bottomSortedData = sortedData.slice(-1);
+            setTableData(sortedData);
+            setTopTableData(topSortedData);
+            setBottomTableData(bottomSortedData);
+        } else {
+            let sortedData = [...tableData].sort((a, b) => {
+                if (hasKey(a, key) && hasKey(b, key)) {
+                    if (a[key] > b[key]) return -1;
+                    if (a[key] < b[key]) return 1;
+                }
+                return 0;
+            });
+            let topSortedData = sortedData.slice(0, -1);
+            let bottomSortedData = sortedData.slice(-1);
+            setTableData(sortedData);
+            setTopTableData(topSortedData);
+            setBottomTableData(bottomSortedData);
+        }
+    };
+
+    const toggleSort = (column: string) => {
+        if (sort.column == column) {
+            setSort({ column, order: sort.order == 'ascending' ? 'descending' : 'ascending' });
+        } else {
+            setSort({ column, order: 'descending' });
+        }
+        console.log(sort)
+    }
 
     const handleLayoutChange = () => {
         if (layout === 'table') {
@@ -201,8 +217,8 @@ const Home: NextPage = () => {
                     </div> */}
                 <div className="w-36"></div> {/* So that the main content lines up with the sidebar */}
                 <main className="relative w-full bg-secondarygrey">
-                    <header className="grid grid-cols-[auto_1fr] grid-rows-1 bg-white shadow-md px-8 py-4">
-                        <div>
+                    <header className="grid grid-cols-[auto_1fr] grid-rows-1 bg-white shadow-center-md z-50">
+                        <div className="px-8 py-4">
                             <h5 className="text-2xl">[Client Name] Products</h5>
                             <h6>
                                 <Link href={{ pathname: '/home' }} >
@@ -245,41 +261,69 @@ const Home: NextPage = () => {
                             </div>
                             
                         </div> */}
-                        <div className="flex place-self-center ">
-                            <div className="relative -mr-8 z-10">
-                                <div className="z-10 bg-red hover:bg-blue-500 border-2 rounded-t-2xl text-white shadow-md">
-                                    <div className="grid place-items-center py-6 pl-6 pr-12 h-[120px] max-w-[150px] text-center">
-                                        <h3>A</h3>
+                        <div className="relative flex self-end justify-self-center">
+                            <Link href={{ pathname: '/products/overview' }} >
+                                <div className="relative -mr-8 z-10">
+                                    <div className="z-10 bg-primary  rounded-t-2xl text-white shadow-center-md cursor-default" onMouseOver={() => handleHover('Overview')} onMouseOut={() => handleHover(null)}>
+                                        <div className="grid place-items-center py-2 pl-6 pr-12 h-[80px] max-w-[220px]  text-center">
+                                            <div className="flex text-center">
+                                                <img height="20px" className="h-[30px] z-20 self-center mr-4" src="/Tracker_W_SQ.png" />
+
+                                                <h3 className="leading-5 font-semibold self-center">Overview</h3>
+
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
+                            </Link>
+                            <div className="relative -mr-8 z-10">
+                                <Link href={{ pathname: '/products/deliveries' }} >
+                                    <div className="z-10 bg-secondarywhite hover:bg-secondarygrey  rounded-t-2xl text-white shadow-center-md transition duration-150 cursor-pointer" onMouseOver={() => handleHover('Deliveries')} onMouseOut={() => handleHover(null)}>
+                                        <div className="grid place-items-center py-2 pl-6 pr-12 h-[80px] max-w-[230px]  text-center">
+                                            <div className="flex text-center">
+                                                {showMenuText !== 'Deliveries' && (
+                                                    <img height="20px" className="h-[30px] z-20 self-center mr-4" src="/Delivery_B_SQ.png" />
+                                                )}
+                                                {showMenuText === 'Deliveries' && (
+                                                    <img height="20px" className="h-[30px] z-20 self-center mr-4" src="/Delivery_B_SQ.png" />
+
+                                                )}
+                                                {showMenuText === 'Deliveries' && (
+                                                    <h3 className="leading-5 text-black self-center">Deliveries</h3>
+
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </Link>
                             </div>
                             <div className="relative -mr-8 z-10">
-                                <div className="z-10 bg-red hover:bg-blue-500 border-2 rounded-t-2xl text-white shadow-md">
-                                    <div className="grid place-items-center py-6 pl-6 pr-12 h-[120px] max-w-[150px] text-center">
-                                        <h3>A</h3>
+                                <Link href={{ pathname: '/products/stock-checks' }} >
+                                    <div className="z-10 bg-secondarywhite hover:bg-secondarygrey  rounded-t-2xl text-white shadow-center-md transition duration-150 cursor-pointer" onMouseOver={() => handleHover('Stock Checks')} onMouseOut={() => handleHover(null)} >
+                                        <div className="grid place-items-center py-2 pl-6 pr-6 h-[80px] max-w-[230px]  text-center">
+                                            <div className="flex text-center">
+                                                {showMenuText !== 'Stock Checks' && (
+                                                    <img height="20px" className="h-[30px] z-20 self-center" src="/Stock_B_SQ.png" />
+                                                )}
+                                                {showMenuText === 'Stock Checks' && (
+                                                    <img height="20px" className="h-[30px] z-20 self-center mr-4" src="/Stock_B_SQ.png" />
+
+                                                )}
+                                                {showMenuText === 'Stock Checks' && (
+                                                    <h3 className="leading-5 text-black self-center">Stock Checks</h3>
+
+                                                )}
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div className="relative -mr-8 z-10">
-                                <div className="z-10 bg-red hover:bg-blue-500 border-2 rounded-t-2xl text-white shadow-md">
-                                    <div className="grid place-items-center py-6 pl-6 pr-12 h-[120px] max-w-[150px] text-center">
-                                        <h3>Add sdfsadf</h3>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="relative -mr-8 z-10">
-                                <div className="z-10 bg-red hover:bg-blue-500 border-2 rounded-t-2xl text-white shadow-md">
-                                    <div className="grid place-items-center py-6 pl-6 pr-6 h-[120px] max-w-[150px] text-center">
-                                        <h3>A</h3>
-                                    </div>
-                                </div>
+                                </Link>
                             </div>
                             {/* <div className="relative -mr-8 z-10">
                                 <div className="z-10 bg-red hover:bg-blue-500 py-12 pl-6 pr-6 border-8 rounded-t-2xl text-white">AA</div>
                             </div> */}
                         </div>
                     </header>
-                    <div className="absolute flex justify-between p-5 rounded-2xl bg-gradient-to-br from-primary to-tertiary inset-x-8 z-50">
+                    <div className="absolute flex justify-between p-5 rounded-2xl bg-primary inset-x-8 z-40">
 
                         <HeaderButton>
                             <div className="flex flex-wrap items-center text-lg select-none cursor-pointer" onClick={() => { handleLayoutChange() }}>
@@ -319,17 +363,17 @@ const Home: NextPage = () => {
 
 
 
-                                {/* <DropdownMenu name="field2" label="Field 2" sort={sort}>
+                                <DropdownMenu name="field2" label="Field 2" sort={sort}>
                                     {columnNames.map((col, index) => (
-                                        <option onClick={() => { toggleSort(col); handleSort(col, sort.order) }} value={col}>{col}</option>
-                                    ))} */}
+                                        <option onClick={() => { toggleSort(col); handleSort(col) }} value={col}>{col}</option>
+                                    ))}
                                     {/* <option onClick={() => { toggleSort('used'); handleSort('used', sort.order) }} value="Option 1">Option 1</option>
                                     <option value="Option 2">Option 2</option>
                                     <option value="Option 3">Option 3</option>
                                     <option value="Option 4">Option 4</option>
                                     <option value="Option 5">Option 5</option>
                                     <option value="Option 6">Option 6</option> */}
-                                {/* </DropdownMenu> */}
+                                </DropdownMenu>
 
                             </div>
                         </HeaderButton>
@@ -420,4 +464,4 @@ const Home: NextPage = () => {
     )
 }
 
-export default Home
+export default Test
